@@ -1,0 +1,24 @@
+<h1 class="countdown"></h1>
+<button class="startButton">Start</button>
+<p class="message"></p>
+
+<script>
+  const countdown = document.querySelector('.countdown');
+  const start = document.querySelector('.startbutton');
+  const timeEnd = document.querySelector('.message');
+  var time = 10;
+
+  start.addEventListener('click', () => {
+    setInterval(() => {
+      if (time >= 0) {
+        countdown.textContent = time;
+        time--;
+      } else {
+        setTimeout(() => {
+          var timeUp = 'The stopwatch has finished!';
+          timeEnd.textContent = timeUp;
+        }, timeout);
+      }
+    }, 1000);
+  });
+</script>

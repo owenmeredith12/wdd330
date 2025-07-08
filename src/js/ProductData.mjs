@@ -3,7 +3,7 @@ function convertToJson(res) {
     return res.json();
   } else {
     throw new Error("Bad Response");
-  }
+  } 
 }
 
 export default class ProductData {
