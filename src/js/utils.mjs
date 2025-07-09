@@ -7,7 +7,9 @@ export function qs(selector, parent = document) {
 
 // retrieve data from localstorage
 export function getLocalStorage(key) {
-  return JSON.parse(localStorage.getItem(key));
+    const data = localStorage.getItem(key);
+    const parsed = JSON.parse(data);
+    return Array.isArray(parsed) ? parsed : [];
 }
 // save data to local storage
 export function setLocalStorage(key, data) {
@@ -15,9 +17,9 @@ export function setLocalStorage(key, data) {
 }
 // set a listener for both touchend and click
 export function setClick(selector, callback) {
-  qs(selector).addEventListener("touchend", (event) => {
+  qs(selector).addEventListener('touchend', (event) => {
     event.preventDefault();
     callback();
   });
-  qs(selector).addEventListener("click", callback);
+  qs(selector).addEventListener('click', callback);
 }
