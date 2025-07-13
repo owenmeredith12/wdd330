@@ -1,8 +1,10 @@
 import ProductData from './ProductData.mjs';
 import ProductList from './ProductList.mjs';
 
-ProductList.forEach(showProducts);
+const dataSource = new ProductData('tents');
 
-function showProducts(ProductList) {
-  ProductList;
-}
+const element = document.querySelector('.product-list');
+
+const productList = new ProductList('Tents', dataSource, element);
+
+productList.init();
