@@ -110,6 +110,10 @@ button {
   cursor: pointer;
 }
 
+.main-header {
+  border-bottom: 2px solid var(--primary-color);
+}
+
 .divider {
   border-bottom: 2px solid var(--primary-color);
 }
