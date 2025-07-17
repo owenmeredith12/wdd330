@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sleep Outside | Home</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+
+  <body>
+    <header class="divider">
+      <div class="logo">
+        <img src="/images/noun_Tent_2517.svg" alt="tent image for logo" />
+        <a href="index.html"> Sleep<span class="highlight">Outside</span></a>
+      </div>
+      <div class="cart">
+        <!-- cart SVG remains unchanged -->
+        <!-- ... -->
+      </div>
+    </header>
+
+    <main>
+      <div class="hero">
+        <img
+          src="../images/banner-sm.jpg"
+          srcset="../images/banner-sm.jpg 500w, ../images/banner.jpg"
+          alt="image of a high mountain lake"
+        />
+        <div class="logo logo--square">
+          <img src="/images/noun_Tent_2517.svg" alt="tent image for logo" />
+          <div>Sleep<span class="highlight">Outside</span></div>
+        </div>
+        <div class="mission">
+          <p>
+            Our mission is to provide you with everything you need to sleep
+            outside comfortably at an affordable price.
+          </p>
+        </div>
+      </div>
+
+      <section class="categories">
+        <h2>Shop by Category</h2>
+        <div class="category-grid">
+          <a href="product_listing/index.html?category=tents" class="category-card">
+            <img src="https://byui-cse.github.io/wdd330-ww-course/images/category-tents.svg" alt="Tents" />
+            <p>Tents</p>
+          </a>
+          <a href="product_listing/index.html?category=backpacks" class="category-card">
+            <img src="https://byui-cse.github.io/wdd330-ww-course/images/category-backpacks.svg" alt="Backpacks" />
+            <p>Backpacks</p>
+          </a>
+          <a href="product_listing/index.html?category=sleepingbags" class="category-card">
+            <img src="https://byui-cse.github.io/wdd330-ww-course/images/category-sleepingbags.svg" alt="Sleeping Bags" />
+            <p>Sleeping Bags</p>
+          </a>
+          <a href="product_listing/index.html?category=hammocks" class="category-card">
+            <img src="https://byui-cse.github.io/wdd330-ww-course/images/category-hammocks.svg" alt="Hammocks" />
+            <p>Hammocks</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="products">
+        <h2 class="title" id="category-title">Top Products</h2>
+        <ul class="product-list"></ul>
+      </section>
+    </main>
+
+    <footer>
+      &copy;2025 ⛺ SleepOutside ⛺ WDD 330 ⛺ BYU-Idaho for BYU-Pathway
+      Worldwide Online
+    </footer>
+
+    <script type="module" src="/js/product-listing.js"></script>
+
+    <!-- 🔽 ADD THIS INLINE SCRIPT TO UPDATE THE PAGE TITLE -->
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const category = params.get("category");
+      if (category) {
+        const titleElement = document.getElementById("product-title");
+        titleElement.textContent = `Top Products: ${category.charAt(0).toUpperCase() + category.slice(1)}`;
+      }
+    </script>
+  </body>
+</html>
