@@ -24,6 +24,8 @@ export default class ProductDetails {
     const cartItems = getLocalStorage("so-cart") || [];
     cartItems.push(this.product);
     setLocalStorage("so-cart", cartItems);
+
+    animateCartIcon(); // Call the function to animate the cart icon
   }
 
   renderProductDetails() {
@@ -44,6 +46,17 @@ function productDetailsTemplate(product) {
   document.getElementById("productDesc").innerHTML = product.DescriptionHtmlSimple;
 
   document.getElementById("addToCart").dataset.id = product.Id;
+}
+
+// Function to animate the cart icon
+function animateCartIcon() {
+  const cartIcon = document.getElementById('cart-icon');
+  if (cartIcon) {
+    cartIcon.classList.add('cart-animate');
+    cartIcon.addEventListener('animationend', () => {
+      cartIcon.classList.remove('cart-animate');
+    }, { once: true });
+  }
 }
 
 // ************* Alternative Display Product Details Method *******************
