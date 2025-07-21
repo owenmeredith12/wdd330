@@ -5,20 +5,12 @@ import { renderListWithTemplate } from "./utils.mjs";
 function productCardTemplate(product) {
   return `
     <li class="product-card">
-<<<<<<< HEAD
-      <img src="${product.Image}" alt="${product.Name}">
-      <h2>${product.Brand.Name}</h2>
-      <h3>${product.Name}</h3>
-      <p class="product-card__price">$${product.FinalPrice}</p>
-      <button class="quick-view-btn" data-id="${product.Id}">Quick View</button>
-=======
       <a href="/product_pages/?product=${product.Id}">
         <img src="${product.Images.PrimaryMedium}" alt="${product.Name}">
         <h3>${product.Brand.Name}</h3>
         <p>${product.NameWithoutBrand}</p>
         <p class="product-card__price">$${product.FinalPrice}</p>
       </a>
->>>>>>> om--individual3
     </li>
   `;
 }
@@ -33,11 +25,7 @@ export default class ProductList {
   async init() {
     const list = await this.dataSource.getData(this.category);
     this.renderList(list);
-<<<<<<< HEAD
-    this.addQuickViewListeners(); // Modified the init method to attach the modal behavior
-=======
     document.querySelector(".title").textContent = this.category;
->>>>>>> om--individual3
   }
 
   renderList(list) {

@@ -3,10 +3,6 @@ import { getLocalStorage, setLocalStorage, loadHeaderFooter } from './utils.mjs'
 loadHeaderFooter();
 
 function renderCartContents() {
-<<<<<<< HEAD
-  const cartItems = getLocalStorage('so-cart') || []; //Update cart rendering logic to handle the case when the cart is empty
-  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-=======
   const cartItems = getLocalStorage('so-cart') || [];
   
   // Check if cart is empty
@@ -16,7 +12,6 @@ function renderCartContents() {
   }
   
   const htmlItems = cartItems.map((item, index) => cartItemTemplate(item, index));
->>>>>>> om--individual3
   document.querySelector('.product-list').innerHTML = htmlItems.join('');
   
   // Add event listeners after rendering
@@ -41,9 +36,6 @@ function cartItemTemplate(item, index) {
   return newItem;
 }
 
-<<<<<<< HEAD
-renderCartContents();
-=======
 function addRemoveListeners() {
   const removeButtons = document.querySelectorAll('.remove-btn');
   
@@ -70,4 +62,3 @@ function removeProductFromCart(index) {
 
 
 renderCartContents();
->>>>>>> om--individual3
