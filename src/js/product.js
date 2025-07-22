@@ -1,4 +1,4 @@
-import { setLocalStorage } from './utils.mjs';
+import { getLocalStorage, setLocalStorage } from './utils.mjs';
 import ProductData from './ProductData.mjs';
 
 // Set up product data source (no category needed now)
@@ -6,7 +6,9 @@ const dataSource = new ProductData();
 
 // Save a product to local storage under the "so-cart" key
 function addProductToCart(product) {
-  setLocalStorage('so-cart', product);
+  const cart = getLocalStorage('so-cart') || [];
+  cart.push(product);
+  setLocalStorage('so-cart', cart);
 }
 
 // Event handler for "Add to Cart" button
