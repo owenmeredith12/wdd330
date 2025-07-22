@@ -1,19 +1,26 @@
-import { getLocalStorage, setLocalStorage, loadHeaderFooter } from './utils.mjs';
+import {
+  getLocalStorage,
+  setLocalStorage,
+  loadHeaderFooter,
+} from './utils.mjs';
 
 loadHeaderFooter();
 
 function renderCartContents() {
   const cartItems = getLocalStorage('so-cart') || [];
-  
+
   // Check if cart is empty
   if (cartItems.length === 0) {
-    document.querySelector('.product-list').innerHTML = '<p>Your cart is empty</p>';
+    document.querySelector('.product-list').innerHTML =
+      '<p>Your cart is empty</p>';
     return;
   }
-  
-  const htmlItems = cartItems.map((item, index) => cartItemTemplate(item, index));
+
+  const htmlItems = cartItems.map((item, index) =>
+    cartItemTemplate(item, index),
+  );
   document.querySelector('.product-list').innerHTML = htmlItems.join('');
-  
+
   // Add event listeners after rendering
   addRemoveListeners();
 }
@@ -38,9 +45,9 @@ function cartItemTemplate(item, index) {
 
 function addRemoveListeners() {
   const removeButtons = document.querySelectorAll('.remove-btn');
-  
-  removeButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
+
+  removeButtons.forEach((button) => {
+    button.addEventListener('click', function (e) {
       const index = parseInt(e.target.dataset.index);
       removeProductFromCart(index);
     });
@@ -48,17 +55,13 @@ function addRemoveListeners() {
 }
 
 function removeProductFromCart(index) {
-  const cartItems = getLocalStorage("so-cart") || [];
-  
-  
-  cartItems.splice(index, 1);
-  
+  const cartItems = getLocalStorage('so-cart') || [];
 
-  setLocalStorage("so-cart", cartItems);
-  
+  cartItems.splice(index, 1);
+
+  setLocalStorage('so-cart', cartItems);
 
   renderCartContents();
 }
-
 
 renderCartContents();
