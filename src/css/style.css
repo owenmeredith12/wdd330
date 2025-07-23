@@ -159,6 +159,11 @@ button {
   margin-top: 2rem;
   padding: 1rem;
 }
+.product-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
 
 .product-list {
   display: flex;
