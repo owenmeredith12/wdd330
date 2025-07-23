@@ -67,17 +67,14 @@ function removeProductFromCart(index) {
 function calcSubtotal() {
   const cartItems = getLocalStorage('so-cart') || [];
   let total = 0;
-  for ( let i =0; i < cartItems.length; i++) {
+  for (let i = 0; i < cartItems.length; i++) {
     console.log(cartItems[i].FinalPrice);
     total += cartItems[i].FinalPrice;
   }
   console.log(total);
 
-  document.getElementById('cart-total').textContent = total.toFixed(2);
-
-
+  document.querySelector('.list-total').innerHTML = `Total: ${total}`;
 }
-
 
 renderCartContents();
 calcSubtotal();
