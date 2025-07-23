@@ -13,3 +13,11 @@ const element = document.querySelector('.product-list');
 const productList = new ProductList(category, dataSource, element);
 // finally call the init method to show the products
 productList.init();
+
+function discountListing() {
+    if (FinalPrice < SuggestedRetailPrice) {
+        alert('This product is discounted.')
+    }
+}
+
+discountListing();

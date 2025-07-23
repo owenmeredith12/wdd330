@@ -304,6 +304,6 @@ button {
 
 footer {
   font-size: var(--small-font);
-  border-top: 1px solid var(--tertiary-color);
+  border-top: 1px solid var(--tertiary-color k);
   padding: 1em;
 }

@@ -14,11 +14,11 @@ async function getUser() {
     });
   } catch (error) {
     console.error(
-      'We ran into an problem retrieving the data requested:',
+      'We ran into a problem retrieving the data requested:',
       error,
     );
   }
 }
 
-user.textContent = 'Loading...';
+userList.textContent = 'Loading...';
 getUser();
