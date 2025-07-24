@@ -4,8 +4,8 @@ export default class ProductDetails {
 
   constructor(productId, dataSource) {
     this.productId = productId;
-    this.product = {};
     this.dataSource = dataSource;
+    this.product = {};
   }
 
   async init() {
@@ -47,6 +47,19 @@ function productDetailsTemplate(product) {
       style: 'currency', currency: 'EUR',
     }).format(Number(product.FinalPrice) * 0.85);
   document.querySelector("#p-price").textContent = `${euroPrice}`;
+
+  // Discount flag logic
+  const originalPrice = Number(product.ListPrice) || 0;
+  const finalPrice = Number(product.FinalPrice) || 0;
+  let discountFlag = '';
+  if (originalPrice > 0 && finalPrice > 0 && originalPrice > finalPrice) {
+    const discountAmount = originalPrice - finalPrice;
+    const discountPercent = Math.round((discountAmount / originalPrice) * 100);
+    discountFlag = `<span class="discount-flag">Save ${discountPercent}% (${discountAmount.toFixed(2)} off)</span>`;
+  }
+  document.querySelector("#p-price").insertAdjacentHTML('afterend', discountFlag);
+  // End of Discount flag logic
+
   document.querySelector("#p-color").textContent = product.Colors[0].ColorName;
   document.querySelector("#p-description").innerHTML = product.DescriptionHtmlSimple;
 

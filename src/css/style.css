@@ -331,3 +331,14 @@ footer {
   animation: cart-bounce 0.6s;
 }
 /* End Add-to-cart Animation */
+
+/* Discount Flag*/
+.discount-flag {
+  color: #fff;
+  background: #e53935;
+  padding: 0.2em 0.6em;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-left: 1em;
+}
+/* End of Discount Flag */
