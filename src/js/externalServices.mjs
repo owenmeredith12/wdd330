@@ -1,6 +1,14 @@
+const isLocal = location.hostname === 'localhost';
+const isNetlify = location.hostname.includes('netlify.app');
 
-const protocol = window.location.protocol === 'https:' ? 'https' : 'http';
-const baseURL = `${protocol}://server-nodejs.cit.byui.edu:3000/`;
+// 1. Local development uses the BYUI HTTP API (it works over HTTP)
+const localBase = 'http://server-nodejs.cit.byui.edu:3000/';
+
+// 2. Live Netlify deployment uses static JSON files (in public/json/)
+const netlifyBase = '/json/';
+
+// Select baseURL at runtime
+const baseURL = isLocal ? localBase : netlifyBase;
 
 async function convertToJson(res) {
   const data = await res.json();
@@ -12,28 +20,38 @@ async function convertToJson(res) {
 }
 
 export default class ExternalServices {
-  constructor(category) {
-    // this.category = category;
-    // this.path = `../json/${this.category}.json`;
-  }
   async getData(category) {
-    const response = await fetch(baseURL + `products/search/${category}`);
-    const data = await convertToJson(response);
-    return data.Result;
+    const url = isLocal
+      ? `${baseURL}products/search/${category}`
+      : `${baseURL}${category}.json`;
+    const response = await fetch(url);
+    return await convertToJson(response).then(res => res.Result || res);
   }
+
   async findProductById(id) {
-    const response = await fetch(baseURL + `product/${id}`);
-    const data = await convertToJson(response);
-    return data.Result;
+    const url = isLocal
+      ? `${baseURL}product/${id}`
+      : `/json/all-products.json`; // fallback for now
+
+    const response = await fetch(url);
+    const result = await convertToJson(response);
+
+    // Netlify JSON fallback: simulate product lookup
+    if (!isLocal) {
+      return result.find((item) => item.Id === id);
+    }
+
+    return result.Result;
   }
+
   async checkout(payload) {
+    if (!isLocal) throw new Error("Checkout not supported in Netlify mode.");
+
     const options = {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     };
-    return await fetch(baseURL + "checkout/", options).then(convertToJson);
+    return await fetch(`${baseURL}checkout/`, options).then(convertToJson);
   }
 }
