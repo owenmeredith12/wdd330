@@ -43,14 +43,14 @@ function productDetailsTemplate(product) {
   productImage.src = product.Images.PrimaryExtraLarge;
   productImage.alt = product.NameWithoutBrand;
 
-  // ✅ Price now in USD
+
   const usdPrice = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
   }).format(Number(product.FinalPrice));
   document.querySelector("#p-price").textContent = usdPrice;
 
-  // Discount flag logic
+ 
   const originalPrice = Number(product.ListPrice) || 0;
   const finalPrice = Number(product.FinalPrice) || 0;
   let discountFlag = '';
@@ -60,7 +60,7 @@ function productDetailsTemplate(product) {
     discountFlag = `<span class="discount-flag">Save ${discountPercent}% ($${discountAmount.toFixed(2)} off)</span>`;
   }
   document.querySelector("#p-price").insertAdjacentHTML('afterend', discountFlag);
-  // End of Discount flag logic
+  
 
   document.querySelector("#p-color").textContent = product.Colors[0].ColorName;
   document.querySelector("#p-description").innerHTML = product.DescriptionHtmlSimple;
