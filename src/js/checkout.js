@@ -3,3 +3,4 @@ import CheckoutProcess from './checkoutProcess.mjs';
 
 const checkout = new CheckoutProcess();
 checkout.calcSubtotal();
+checkout.calcOrderTotal();

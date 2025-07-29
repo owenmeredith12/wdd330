@@ -73,8 +73,33 @@ function calcSubtotal() {
   }
   console.log(total);
 
-  document.querySelector('.list-total').innerHTML = `Total: ${total}`;
+  
 }
+
+  function calcOrderTotal(){
+    const cartItems = getLocalStorage('so-cart') || [];
+    let total = 0; 
+    let tax = 0;
+    for (let i =0; i < cartItems.length; i++){
+        console.log(cartItems[i].FinalPrice);
+        total += cartItems[i].FinalPrice;
+    }
+
+    total+= total *= .06;
+    
+    if (cartItems.length > 0){
+        tax = 10;
+    }
+    else if(cartItems.length > 1 ){
+        tax = 10;
+        tax += ((cartItems.length - 1) *2);
+    }
+    total += tax;
+    console.log(total);
+    let formattedTotal = total.toFixed(2);
+    document.querySelector('.list-total').innerHTML = `Total: ${formattedTotal}`;
+  }
 
 renderCartContents();
 calcSubtotal();
+calcOrderTotal();
