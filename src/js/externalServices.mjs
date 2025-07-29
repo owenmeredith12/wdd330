@@ -1,6 +1,3 @@
-// Import product loader to make sure Vite knows we use all-products.json
-import { loadAllProducts } from './loadAllProducts.mjs';
-
 const isLocal = location.hostname === 'localhost';
 const baseURL = isLocal
   ? 'http://server-nodejs.cit.byui.edu:3000/'
@@ -15,6 +12,16 @@ async function convertToJson(res) {
   }
 }
 
+function getFileNameForCategory(category) {
+  // Map category to its corresponding JSON file
+  const map = {
+    tents: 'tents.json',
+    backpacks: 'backpacks.json',
+    'sleeping-bags': 'sleeping-bags.json',
+  };
+  return map[category.toLowerCase()] || null;
+}
+
 export default class ExternalServices {
   async getData(category) {
     if (isLocal) {
@@ -22,10 +29,11 @@ export default class ExternalServices {
       const data = await convertToJson(response);
       return data.Result;
     } else {
-      const allProducts = await loadAllProducts();
-      return allProducts.filter(
-        (p) => (p.Category || '').toLowerCase() === category.toLowerCase()
-      );
+      const fileName = getFileNameForCategory(category);
+      if (!fileName) throw new Error(`Unknown category: ${category}`);
+      const response = await fetch(`${baseURL}${fileName}`);
+      const data = await convertToJson(response);
+      return data;
     }
   }
 
@@ -35,10 +43,15 @@ export default class ExternalServices {
       const data = await convertToJson(response);
       return data.Result;
     } else {
-      const allProducts = await loadAllProducts();
-      const product = allProducts.find((p) => p.Id === id);
-      if (!product) throw new Error(`Product with ID ${id} not found`);
-      return product;
+      // Try loading from all 3 files
+      const files = ['tents.json', 'backpacks.json', 'sleeping-bags.json'];
+      for (const file of files) {
+        const res = await fetch(`${baseURL}${file}`);
+        const products = await convertToJson(res);
+        const match = products.find((p) => p.Id === id);
+        if (match) return match;
+      }
+      throw new Error(`Product with ID ${id} not found`);
     }
   }
 
@@ -47,12 +60,13 @@ export default class ExternalServices {
       throw new Error("Checkout is only available in development.");
     }
 
-    const response = await fetch(`${baseURL}checkout/`, {
+    const options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-    });
+    };
 
+    const response = await fetch(`${baseURL}checkout/`, options);
     return await convertToJson(response);
   }
 }
