@@ -28,21 +28,20 @@ export default class ExternalServices {
     return await convertToJson(response).then(res => res.Result || res);
   }
 
-  async findProductById(id) {
-    const url = isLocal
-      ? `${baseURL}product/${id}`
-      : `/json/all-products.json`; // fallback for now
+async findProductById(id) {
+  const url = isLocal
+    ? `${localBase}product/${id}`
+    : '/json/all-products.json';
 
-    const response = await fetch(url);
-    const result = await convertToJson(response);
+  const response = await fetch(url);
+  const result = await convertToJson(response);
 
-    // Netlify JSON fallback: simulate product lookup
-    if (!isLocal) {
-      return result.find((item) => item.Id === id);
-    }
-
-    return result.Result;
+  if (!isLocal) {
+    return result.find((item) => item.Id === id);
   }
+
+  return result.Result;
+}
 
   async checkout(payload) {
     if (!isLocal) throw new Error("Checkout not supported in Netlify mode.");
