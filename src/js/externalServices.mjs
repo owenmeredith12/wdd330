@@ -1,3 +1,6 @@
+// Import product loader to make sure Vite knows we use all-products.json
+import { loadAllProducts } from './loadAllProducts.mjs';
+
 const isLocal = location.hostname === 'localhost';
 const baseURL = isLocal
   ? 'http://server-nodejs.cit.byui.edu:3000/'
@@ -14,17 +17,15 @@ async function convertToJson(res) {
 
 export default class ExternalServices {
   async getData(category) {
-    let data;
-
     if (isLocal) {
       const response = await fetch(`${baseURL}products/search/${category}`);
-      data = await convertToJson(response);
+      const data = await convertToJson(response);
       return data.Result;
     } else {
-      const response = await fetch(`${baseURL}all-products.json`);
-      const allProducts = await convertToJson(response);
-      // Filter by Category, fallback to [] if category missing
-      return allProducts.filter(p => (p.Category || '').toLowerCase() === category.toLowerCase());
+      const allProducts = await loadAllProducts();
+      return allProducts.filter(
+        (p) => (p.Category || '').toLowerCase() === category.toLowerCase()
+      );
     }
   }
 
@@ -34,9 +35,8 @@ export default class ExternalServices {
       const data = await convertToJson(response);
       return data.Result;
     } else {
-      const response = await fetch(`${baseURL}all-products.json`);
-      const allProducts = await convertToJson(response);
-      const product = allProducts.find(p => p.Id === id);
+      const allProducts = await loadAllProducts();
+      const product = allProducts.find((p) => p.Id === id);
       if (!product) throw new Error(`Product with ID ${id} not found`);
       return product;
     }
@@ -44,15 +44,15 @@ export default class ExternalServices {
 
   async checkout(payload) {
     if (!isLocal) {
-      throw new Error("Checkout not supported in production (static site).");
+      throw new Error("Checkout is only available in development.");
     }
 
-    const options = {
+    const response = await fetch(`${baseURL}checkout/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-    };
-    const response = await fetch(`${baseURL}checkout/`, options);
+    });
+
     return await convertToJson(response);
   }
 }
