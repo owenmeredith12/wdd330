@@ -1,14 +1,7 @@
 const isLocal = location.hostname === 'localhost';
-const isNetlify = location.hostname.includes('netlify.app');
-
-// 1. Local development uses the BYUI HTTP API (it works over HTTP)
-const localBase = 'http://server-nodejs.cit.byui.edu:3000/';
-
-// 2. Live Netlify deployment uses static JSON files (in public/json/)
-const netlifyBase = '/json/';
-
-// Select baseURL at runtime
-const baseURL = isLocal ? localBase : netlifyBase;
+const baseURL = isLocal
+  ? 'http://server-nodejs.cit.byui.edu:3000/'
+  : '/json/';
 
 async function convertToJson(res) {
   const data = await res.json();
@@ -21,36 +14,45 @@ async function convertToJson(res) {
 
 export default class ExternalServices {
   async getData(category) {
-    const url = isLocal
-      ? `${baseURL}products/search/${category}`
-      : `${baseURL}${category}.json`;
-    const response = await fetch(url);
-    return await convertToJson(response).then(res => res.Result || res);
+    let data;
+
+    if (isLocal) {
+      const response = await fetch(`${baseURL}products/search/${category}`);
+      data = await convertToJson(response);
+      return data.Result;
+    } else {
+      const response = await fetch(`${baseURL}all-products.json`);
+      const allProducts = await convertToJson(response);
+      // Filter by Category, fallback to [] if category missing
+      return allProducts.filter(p => (p.Category || '').toLowerCase() === category.toLowerCase());
+    }
   }
 
-async findProductById(id) {
-  const url = isLocal
-    ? `${localBase}product/${id}`
-    : '/json/all-products.json';
-
-  const response = await fetch(url);
-  const result = await convertToJson(response);
-
-  if (!isLocal) {
-    return result.find((item) => item.Id === id);
+  async findProductById(id) {
+    if (isLocal) {
+      const response = await fetch(`${baseURL}product/${id}`);
+      const data = await convertToJson(response);
+      return data.Result;
+    } else {
+      const response = await fetch(`${baseURL}all-products.json`);
+      const allProducts = await convertToJson(response);
+      const product = allProducts.find(p => p.Id === id);
+      if (!product) throw new Error(`Product with ID ${id} not found`);
+      return product;
+    }
   }
-
-  return result.Result;
-}
 
   async checkout(payload) {
-    if (!isLocal) throw new Error("Checkout not supported in Netlify mode.");
+    if (!isLocal) {
+      throw new Error("Checkout not supported in production (static site).");
+    }
 
     const options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     };
-    return await fetch(`${baseURL}checkout/`, options).then(convertToJson);
+    const response = await fetch(`${baseURL}checkout/`, options);
+    return await convertToJson(response);
   }
 }
