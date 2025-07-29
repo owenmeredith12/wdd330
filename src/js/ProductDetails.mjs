@@ -42,11 +42,13 @@ function productDetailsTemplate(product) {
   const productImage = document.querySelector("#p-image");
   productImage.src = product.Images.PrimaryExtraLarge;
   productImage.alt = product.NameWithoutBrand;
-  const euroPrice = new Intl.NumberFormat('de-DE',
-    {
-      style: 'currency', currency: 'EUR',
-    }).format(Number(product.FinalPrice) * 0.85);
-  document.querySelector("#p-price").textContent = `${euroPrice}`;
+
+  // ✅ Price now in USD
+  const usdPrice = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(Number(product.FinalPrice));
+  document.querySelector("#p-price").textContent = usdPrice;
 
   // Discount flag logic
   const originalPrice = Number(product.ListPrice) || 0;
@@ -55,7 +57,7 @@ function productDetailsTemplate(product) {
   if (originalPrice > 0 && finalPrice > 0 && originalPrice > finalPrice) {
     const discountAmount = originalPrice - finalPrice;
     const discountPercent = Math.round((discountAmount / originalPrice) * 100);
-    discountFlag = `<span class="discount-flag">Save ${discountPercent}% (${discountAmount.toFixed(2)} off)</span>`;
+    discountFlag = `<span class="discount-flag">Save ${discountPercent}% ($${discountAmount.toFixed(2)} off)</span>`;
   }
   document.querySelector("#p-price").insertAdjacentHTML('afterend', discountFlag);
   // End of Discount flag logic

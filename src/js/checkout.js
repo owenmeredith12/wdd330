@@ -1,6 +1,17 @@
 import { loadHeaderFooter } from './utils.mjs';
 import CheckoutProcess from './checkoutProcess.mjs';
 
-const checkout = new CheckoutProcess();
-checkout.calcSubtotal();
-checkout.calcOrderTotal();
+loadHeaderFooter();
+
+const myCheckout = new CheckoutProcess('so-cart', '.checkout-summary');
+myCheckout.init();
+
+document
+  .querySelector('#zip')
+  .addEventListener('blur', myCheckout.calculateOrdertotal.bind(myCheckout));
+// listening for click on the button
+document.querySelector('#checkoutSubmit').addEventListener('click', (e) => {
+  e.preventDefault();
+
+  myCheckout.checkout();
+});
