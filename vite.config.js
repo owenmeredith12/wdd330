@@ -3,9 +3,11 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   root: 'src/',
-  base: '',
+
+  base: '', // << important for Netlify paths
+
   build: {
-    outDir: 'dist',
+    outDir: '../dist', // <<< must be relative to root
     emptyOutDir: true,
     rollupOptions: {
       input: {
