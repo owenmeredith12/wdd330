@@ -23,19 +23,30 @@ function getFileNameForCategory(category) {
 }
 
 export default class ExternalServices {
-  async getData(category) {
-    if (isLocal) {
-      const response = await fetch(`${baseURL}products/search/${category}`);
-      const data = await convertToJson(response);
-      return data.Result;
-    } else {
-      const fileName = getFileNameForCategory(category);
-      if (!fileName) throw new Error(`Unknown category: ${category}`);
-      const response = await fetch(`${baseURL}${fileName}`);
-      const data = await convertToJson(response);
-      return data;
-    }
+async getData(category) {
+  if (isLocal) {
+    const response = await fetch(`${baseURL}products/search/${category}`);
+    const data = await convertToJson(response);
+    return data.Result;
+  } else {
+    const fileName = getFileNameForCategory(category);
+    if (!fileName) throw new Error(`Unknown category: ${category}`);
+
+    const response = await fetch(`${baseURL}${fileName}`);
+    const data = await convertToJson(response);
+
+    // Fix missing image paths
+    return data.map((product) => {
+      if (!product.Images || !product.Images.PrimaryMedium) {
+        const imageFileName = `${product.Id.toLowerCase()}.jpg`;
+        product.Images = {
+          PrimaryMedium: `/images/${category}/${imageFileName}`
+        };
+      }
+      return product;
+    });
   }
+}
 
   async findProductById(id) {
     if (isLocal) {
