@@ -336,3 +336,36 @@ footer {
   margin-left: 1em;
 }
 /* End of Discount Flag */
+
+/* Newsletter Signup */
+.newsletter-signup {
+  background: #f9f9f9;
+  padding: 2em;
+  text-align: center;
+  border-radius: 8px;
+  margin: 2em auto;
+  max-width: 600px;
+}
+.newsletter-signup input[type="email"] {
+  padding: 0.5em;
+  width: 70%;
+  margin-right: 0.5em;
+  margin-top: 2em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.newsletter-signup button {
+  padding: 0.5em 1em;
+  border-radius: 4px;
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin-top: 1em;
+}
+#newsletter-message {
+  margin-top: 1em;
+  color: #2e7d32;
+  font-weight: bold;
+}
+/* Ending of Newsletter Signup */
